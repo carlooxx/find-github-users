@@ -6,6 +6,11 @@ const githubreducer = (state, action) => {
         users: action.payload,
         isLoading: false,
       };
+    case "SET_LOADING":
+      return {
+        ...state,
+        isLoading: true,
+      };
     default:
       return state;
   }
