@@ -31,11 +31,22 @@ export const GithubProvider = ({ children }) => {
     });
   };
 
+  const clearSearch = () => {
+    dispatch({
+      type: "CLEAR_SEARCH",
+    });
+  };
+
   const setLoading = () => dispatch({ type: "SET_LOADING" });
 
   return (
     <GithubContext.Provider
-      value={{ users: state.users, isLoading: state.isLoading, searchUsers }}
+      value={{
+        users: state.users,
+        isLoading: state.isLoading,
+        searchUsers,
+        clearSearch,
+      }}
     >
       {children}
     </GithubContext.Provider>

@@ -11,6 +11,12 @@ const githubreducer = (state, action) => {
         ...state,
         isLoading: true,
       };
+    case "CLEAR_SEARCH":
+      return {
+        ...state,
+        users: [],
+        isLoading: false,
+      };
     default:
       return state;
   }
