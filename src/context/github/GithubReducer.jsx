@@ -17,6 +17,11 @@ const githubreducer = (state, action) => {
         users: [],
         isLoading: false,
       };
+    case "GET_USER":
+      return {
+        ...state,
+        user: action.payload,
+      };
     default:
       return state;
   }
