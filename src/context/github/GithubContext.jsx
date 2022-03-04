@@ -17,23 +17,6 @@ export const GithubProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(githubreducer, initialState);
 
-  //Search users
-  const searchUsers = async (user) => {
-    setLoading();
-    const response = await axios.get(`${GITHUB_URL}/search/users?q=${user}`, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-      },
-    });
-
-    const { items } = await response.data;
-
-    dispatch({
-      type: "GET_USERS",
-      payload: items,
-    });
-  };
-
   //Get user
   const getUser = async (login) => {
     setLoading();
@@ -84,11 +67,8 @@ export const GithubProvider = ({ children }) => {
   return (
     <GithubContext.Provider
       value={{
-        users: state.users,
-        user: state.user,
-        repos: state.repos,
-        isLoading: state.isLoading,
-        searchUsers,
+        ...state,
+        dispatch,
         clearSearch,
         getUser,
         getUserRepo,
