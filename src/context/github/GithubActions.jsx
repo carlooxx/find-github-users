@@ -1,10 +1,16 @@
 import axios from "axios";
+
 const GITHUB_URL = process.env.REACT_APP_GITHUB_URL;
 const GITHUB_TOKEN = process.env.REACT_APP_GITHUB_TOKEN;
 
+const github = axios.create({
+  baseURL: GITHUB_URL,
+  headers: { Authorization: `token ${GITHUB_TOKEN}` },
+});
+
 //Search users
 export const searchUsers = async (user) => {
-  const response = await axios.get(`${GITHUB_URL}/search/users?q=${user}`, {
+  const response = await github.get(`${GITHUB_URL}/search/users?q=${user}`, {
     headers: {
       Authorization: `token ${GITHUB_TOKEN}`,
     },
@@ -14,31 +20,12 @@ export const searchUsers = async (user) => {
   return items;
 };
 
-//Get user
-export const getUser = async (login) => {
-    const response = await axios.get(`${GITHUB_URL}/users/${login}`, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-      },
-    });
+//Get user and repos
+export const getUserAndRepos = async (login) => {
+  const [user, repos] = await Promise.all([
+    github.get(`/users/${login}`),
+    github.get(`/users/${login}/repos`),
+  ]);
 
-    const data = await response.data;
-
-    if (response.status === 404) {
-      window.location = "/notfound";
-    }
-    return data;
-  };
-
-  //Get user Repos
-  export const getUserRepo = async (login) => {
-    const response = await axios.get(`${GITHUB_URL}/users/${login}/repos`, {
-      headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-      },
-    });
-
-    const data = await response.data;
-
-    return data;
-  };
+  return { user: user.data, repos: repos.data };
+};
